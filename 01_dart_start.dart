@@ -91,7 +91,7 @@ mixin Piloted {
 }
 
 class PilotedCraft extends Spacecraft with Piloted {
-  PilotedCraft(String name, DateTime date):super(name, date);
+  PilotedCraft(String name, DateTime date) : super(name, date);
 }
 
 void use_Spacecraft() {
@@ -121,6 +121,7 @@ abstract class Describable {
 class MockSpaceship extends Describable implements Spacecraft {
   String name;
   DateTime? launchDate;
+
   int? get launchYear => launchDate?.year;
 
   MockSpaceship(this.name) {}
@@ -136,9 +137,32 @@ void use_MockSpaceship() {
   spaceship.describeWithEmphasis();
 }
 
+const oneSecond = Duration(seconds: 1);
+
+Future<void> printWithDelay(String message) async {
+  await Future.delayed(oneSecond);
+  print(message);
+}
+
+void async_test() {
+  for (int i = 0; i < 20; i++) {
+    printWithDelay("hello" + i.toString());
+  }
+}
+
+Future<void> sync_test() async {
+  for (int i = 0; i < 20; i++) {
+    await printWithDelay("hello" + i.toString());
+  }
+}
+
+void test_exception() {
+
+}
+
 // 双斜杠注释
 /* 单斜杠加星号的注释 */
-void main(List<String> args) {
+void main(List<String> args) async {
   var result = fibonacci(20);
   variable_use();
   progress_control();
@@ -149,6 +173,9 @@ void main(List<String> args) {
   use_extend_class();
   use_PilotedCraft();
   use_MockSpaceship();
+
+  async_test();
+  sync_test();
 
   print("\n" + result.toString());
 }

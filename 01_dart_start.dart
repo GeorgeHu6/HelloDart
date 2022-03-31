@@ -61,10 +61,7 @@ class Spacecraft {
     var launchDate = this.launchDate;
     if (launchDate != null) {
       //运算符~/表示取整除法
-      int years = DateTime
-          .now()
-          .difference(launchDate)
-          .inDays ~/ 365;
+      int years = DateTime.now().difference(launchDate).inDays ~/ 365;
       print("Launched: $launchYear ($years years ago)");
     } else {
       print("Unlaunched");
@@ -76,11 +73,11 @@ class Orbiter extends Spacecraft {
   double altitude;
 
   Orbiter(String name, DateTime launchDate, this.altitude)
-      :super(name, launchDate);
+      : super(name, launchDate);
 }
 
 void use_extend_class() {
-  Orbiter orbiter = Orbiter("Orbiter I", DateTime(2022, 3 31), 1980.5);
+  Orbiter orbiter = Orbiter("Orbiter I", DateTime(2022, 3, 31), 1980.5);
 
   print(orbiter.launchYear);
 }
@@ -93,7 +90,9 @@ mixin Piloted {
   }
 }
 
-class PilotedCraft extends Spacecraft with Piloted {}
+class PilotedCraft extends Spacecraft with Piloted {
+  PilotedCraft(String name, DateTime date):super(name, date);
+}
 
 void use_Spacecraft() {
   var voyager = Spacecraft("Voyager I", DateTime(1977, 9, 5));
@@ -104,8 +103,8 @@ void use_Spacecraft() {
 }
 
 void use_PilotedCraft() {
-  PilotedCraft pilotedCraft = PilotedCraft(
-      "PilotedCraft I", DateTime(2022, 3, 30));
+  PilotedCraft pilotedCraft =
+      PilotedCraft("PilotedCraft I", DateTime(2022, 3, 30));
   pilotedCraft.describeCrew();
 }
 
@@ -119,8 +118,22 @@ abstract class Describable {
   }
 }
 
-class MockSpaceship implements Spacecraft {
+class MockSpaceship extends Describable implements Spacecraft {
+  String name;
+  DateTime? launchDate;
+  int? get launchYear => launchDate?.year;
 
+  MockSpaceship(this.name) {}
+
+  @override
+  void describe() {
+    print("$launchYear");
+  }
+}
+
+void use_MockSpaceship() {
+  MockSpaceship spaceship = MockSpaceship("spaceship I");
+  spaceship.describeWithEmphasis();
 }
 
 // 双斜杠注释
@@ -133,6 +146,9 @@ void main(List<String> args) {
   func();
 
   use_Spacecraft();
+  use_extend_class();
+  use_PilotedCraft();
+  use_MockSpaceship();
 
   print("\n" + result.toString());
 }

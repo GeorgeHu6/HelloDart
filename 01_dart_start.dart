@@ -130,6 +130,9 @@ class MockSpaceship extends Describable implements Spacecraft {
 
   int? get launchYear => launchDate?.year;
 
+  set setDate(DateTime date){
+    this.launchDate = date;
+  }
   MockSpaceship(this.name) {}
 
   @override
@@ -163,6 +166,7 @@ void use_PilotedCraft() {
 
 void use_MockSpaceship() {
   MockSpaceship spaceship = MockSpaceship("spaceship I");
+  spaceship.setDate = DateTime(2022, 3, 10);
   spaceship.describeWithEmphasis();
 }
 

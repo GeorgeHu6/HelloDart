@@ -1,4 +1,6 @@
 // dart:core test
+import 'dart:collection';
+
 void dartcore_numbers_collection_string() {
   // 测试dart核心库中数字、集合、字符串的功能
   print('\n' + '#' * 40);
@@ -231,9 +233,11 @@ void uri_test() {
   print('#' * 40);
   // 测试URI类的常用功能
   var uri = 'https://www.optgeo.top/?title=你好';
+  print('原始URI：$uri');
 
   // 将除了/:&#外的字符都进行编码，以生成一个合法可用的URI
   var encoded = Uri.encodeFull(uri);
+  print('encodeFull得到的：$encoded');
   assert(encoded == 'https://www.optgeo.top/?title=%E4%BD%A0%E5%A5%BD');
   // 反向操作解码
   var decoded = Uri.decodeFull(encoded);
@@ -241,6 +245,7 @@ void uri_test() {
 
   // 将所有字符都编码
   encoded = Uri.encodeComponent(uri);
+  print("encodeComponent得到的：$encoded");
   assert(encoded ==
       'https%3A%2F%2Fwww.optgeo.top%2F%3Ftitle%3D%E4%BD%A0%E5%A5%BD');
   decoded = Uri.decodeComponent(encoded);
@@ -298,10 +303,90 @@ void dates_and_times() {
   assert(duration.inDays == 366);
 }
 
+class Line implements Comparable<Line> {
+  final int length;
+
+  const Line(this.length);
+
+  @override
+  int compareTo(Line other) => length - other.length;
+}
+
+class Person {
+  final String firstName, lastName;
+
+  Person(this.firstName, this.lastName);
+
+  @override
+  int get hashCode => Object.hash(firstName, lastName);
+
+  @override
+  bool operator ==(Object other) =>
+      other is Person &&
+      firstName == other.firstName &&
+      lastName == other.lastName;
+}
+
+class Process {
+  int _uid;
+  Process(this._uid);
+  int get uid => _uid;
+}
+
+// 作为Processes的迭代器
+class ProcessIterator implements Iterator<Process> {
+  List<Process> list;
+  int index = -1;
+
+  ProcessIterator(this.list);
+
+  @override
+  Process get current => list[index];
+
+  @override
+  bool moveNext() => (++index) < list.length;
+}
+
+class Processes extends IterableBase<Process> {
+  List<Process> process;
+
+  Processes(this.process);
+
+  @override
+  Iterator<Process> get iterator => ProcessIterator(this.process);
+}
+
+void utility_test() {
+  print('\n');
+  print('#' * 40);
+  print('工具类测试');
+  print('#' * 40);
+  // 实现了Comparable接口的类，用compareTo进行比较
+  var short = Line(1);
+  var long = Line(100);
+  assert(short.compareTo(long) < 0);
+  // 重写了hashCode的getter的类
+  var p1 = Person('Bob', 'Smith');
+  var p2 = Person('Bob', 'Smith');
+  var p3 = 'not a person';
+  assert(p1.hashCode == p2.hashCode);
+  assert(p1 == p2);
+  assert(p1 != p3);
+  // 测试有Iterator的类
+  var pr1 = Process(1);
+  var pr2 = Process(2);
+  Processes processes = Processes([pr1, pr2]);
+  print('迭代器');
+  for (Process p in processes) {
+    print(p.uid);
+  }
+}
+
 int main() {
   dartcore_numbers_collection_string();
   collections();
   uri_test();
   dates_and_times();
+  utility_test();
   return 0;
 }

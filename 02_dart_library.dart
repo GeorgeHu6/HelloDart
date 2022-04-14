@@ -105,6 +105,37 @@ void the_lists() {
   assert(fruit is String);
 }
 
+void the_sets() {
+  var ingredients = <String>{};
+  ingredients.addAll(['gold', 'titanium', 'xenon']);
+  assert(ingredients.length == 3);
+
+  // 在集合中添加已有元素，不会有任何效果
+  ingredients.add('gold');
+  assert(ingredients.length == 3);
+
+  ingredients.remove('gold');
+  assert(ingredients.length == 2);
+
+  // 使用Set的from构造函数
+  var atomicNumbers = Set.from([1, 2, 3]);
+  assert(atomicNumbers.length == 3);
+
+  ingredients.clear();
+  ingredients.addAll(['gold', 'titanium', 'xenon']);
+  assert(ingredients.contains('titanium'));
+  assert(ingredients.containsAll(['titanium', 'xenon']));
+
+  ingredients.clear();
+  ingredients.addAll(['gold', 'titanium', 'xenon']);
+
+  // 集合的一些基本运算
+  var nobelGases = Set.from(['xenon', 'argon']);
+  var intersection = ingredients.intersection(nobelGases);
+  assert(intersection.length == 1);
+  assert(intersection.contains('xenon'));
+}
+
 int main() {
   dartcore_numbers_collection_string();
   the_lists();

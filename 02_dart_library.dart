@@ -1,8 +1,8 @@
-// Part 1 dart:core
+// dart:core test
 void dartcore_numbers_collection_string() {
   // 测试dart核心库中数字、集合、字符串的功能
-  print('#'*40);
-  print("测试dart核心库中数字、集合、字符串的功能\n");
+  print('\n'+'#'*40);
+  print("测试dart核心库中数字、集合、字符串的功能");
   print('#'*40);
 
   assert(int.parse('42') == 42);
@@ -21,7 +21,7 @@ void dartcore_numbers_collection_string() {
   assert(double.parse('1.2e+2') == 120.0);
 
   // String的一些基本方法
-  String sample = 'Nerver odd or even';
+  String sample = 'Never odd or even';
   assert(sample.contains('odd'));
   assert(sample.startsWith('Never'));
   assert(sample.endsWith('even'));
@@ -30,7 +30,7 @@ void dartcore_numbers_collection_string() {
 
   var parts = sample.split(' ');
   assert(parts.length == 4);
-  assert(parts[0] == 'Nerver');
+  assert(parts[0] == 'Never');
 
   assert(sample[0] == 'N');
 
@@ -52,8 +52,27 @@ void dartcore_numbers_collection_string() {
 
   var greetingTemplate = 'Hello, NAME!';
   var greeting = greetingTemplate.replaceAll(RegExp('NAME'), 'George');
-}
 
+  assert(greeting != greetingTemplate);
+
+  var sb = StringBuffer();
+  sb
+    ..write('Use a StringBuffer for ')
+    ..writeAll(['efficient', 'string', 'creation'], ' ')
+    ..write('.');
+
+  var fullString = sb.toString();
+  assert(fullString == 'Use a StringBuffer for efficient string creation.');
+
+  // 正则测试
+  // 匹配一个或多个数字
+  var numbersRe = RegExp(r'\d+');
+  var allCharacters = 'llamas live fifteen to twenty years';
+  var someDigits = 'llamas live 15 to 20 years';
+
+  assert(!allCharacters.contains(numbersRe));
+  assert(someDigits.contains(numbersRe));
+}
 
 int main() {
   dartcore_numbers_collection_string();

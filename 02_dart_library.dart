@@ -74,8 +74,39 @@ void dartcore_numbers_collection_string() {
   assert(someDigits.contains(numbersRe));
 }
 
+void the_lists() {
+  // 测试dart中的一些列表的操作
+  var grains = <String>[];
+  assert(grains.isEmpty);
+
+  var fruits = ['apples', 'oranges'];
+  fruits.add('pineapples');
+  fruits.addAll(['grapes', 'bananas']);
+  // 插在开头
+  fruits.insert(0, 'peach');
+  assert(fruits.length == 6);
+
+  var appleIndex = fruits.indexOf('apples');
+  fruits.removeAt(appleIndex);
+  assert(fruits.length == 5);
+  fruits.clear();
+  assert(fruits.isEmpty);
+
+  var vegetables = List.filled(99, 'broccoli');
+  assert(vegetables.every((element) => element == 'broccoli'));
+
+  fruits = ['bananas', 'apples', 'oranges'];
+  // 进行排序，排序规则需要以函数为参数传入
+  fruits.sort((a, b) => a.compareTo(b));
+  assert(fruits[0] == 'apples');
+  fruits = <String>[];
+  fruits.add('apples');
+  var fruit = fruits[0];
+  assert(fruit is String);
+}
+
 int main() {
   dartcore_numbers_collection_string();
-
+  the_lists();
   return 0;
 }

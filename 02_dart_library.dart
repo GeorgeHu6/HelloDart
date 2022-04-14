@@ -174,6 +174,7 @@ void the_maps() {
   String pickToughestKid() {
     return "pickToughestKid";
   }
+
   // 若key不存在于该Map中，就加入
   teamAssignments.putIfAbsent('Catcher', () => pickToughestKid());
   assert(teamAssignments['Catcher'] != null);
@@ -211,11 +212,96 @@ void the_public_methods() {
   assert(!teas.every(isDecaffeinated));
 }
 
-int main() {
-  dartcore_numbers_collection_string();
+void collections() {
+  print('\n');
+  print('#' * 40);
+  print('集合');
+  print('#' * 40);
+
   the_lists();
   the_sets();
   the_maps();
   the_public_methods();
+}
+
+void uri_test() {
+  print('\n');
+  print('#' * 40);
+  print('URI');
+  print('#' * 40);
+  // 测试URI类的常用功能
+  var uri = 'https://www.optgeo.top/?title=你好';
+
+  // 将除了/:&#外的字符都进行编码，以生成一个合法可用的URI
+  var encoded = Uri.encodeFull(uri);
+  assert(encoded == 'https://www.optgeo.top/?title=%E4%BD%A0%E5%A5%BD');
+  // 反向操作解码
+  var decoded = Uri.decodeFull(encoded);
+  assert(decoded == 'https://www.optgeo.top/?title=你好');
+
+  // 将所有字符都编码
+  encoded = Uri.encodeComponent(uri);
+  assert(encoded ==
+      'https%3A%2F%2Fwww.optgeo.top%2F%3Ftitle%3D%E4%BD%A0%E5%A5%BD');
+  decoded = Uri.decodeComponent(encoded);
+  assert(decoded == 'https://www.optgeo.top/?title=你好');
+
+  // 解析网址并获取各个部分的内容
+  var uri_parse = Uri.parse(uri);
+  assert(uri_parse.scheme == 'https');
+  assert(uri_parse.host == 'www.optgeo.top');
+  assert(uri_parse.path == '/');
+
+  // 通过各个部分的内容构造出URI
+  var another_uri = Uri(
+    scheme: 'https',
+    host: 'www.optgeo.top',
+    path: '/',
+  );
+  assert(another_uri.toString() == 'https://www.optgeo.top/');
+}
+
+void dates_and_times() {
+  print('\n');
+  print('#' * 40);
+  print('时间和日期');
+  print('#' * 40);
+
+  // 通过多种方式构建DateTime，若不是特别指定，默认构建的是LocalTime
+  var now = DateTime.now();
+  // 2000/1/1
+  var y2k = DateTime(2000);
+  // 2000/1/2
+  y2k = DateTime(2000, 1, 2);
+  // UTC 2000/1/1
+  y2k = DateTime.utc(2000);
+  // 通过Unix时间戳构建
+  y2k = DateTime.fromMicrosecondsSinceEpoch(946680000000, isUtc: true);
+  y2k = DateTime.parse('2000-01-01T00:00:00Z');
+  y2k = DateTime.utc(2000);
+  assert(y2k.millisecondsSinceEpoch == 946684800000);
+  // unix时间戳原点
+  var unixEpoch = DateTime.utc(1970);
+  assert(unixEpoch.millisecondsSinceEpoch == 0);
+
+  // 对DateTime的一些操作
+  y2k = DateTime.utc(2000);
+  // 加上1年
+  var y2001 = y2k.add(const Duration(days: 366));
+  assert(y2001.year == 2001);
+  // 减30天
+  var december2000 = y2001.subtract(const Duration(days: 30));
+  assert(december2000.year == 2000);
+  assert(december2000.month == 12);
+  // 计算DateTime之间的时间差
+  var duration = y2001.difference(y2k);
+  assert(duration.inDays == 366);
+}
+
+int main() {
+  dartcore_numbers_collection_string();
+  collections();
+  uri_test();
+  dates_and_times();
   return 0;
 }

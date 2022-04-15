@@ -382,11 +382,93 @@ void utility_test() {
   }
 }
 
+// 自定义一个异常类
+class FooException implements Exception {
+  final String? msg;
+
+  const FooException([this.msg]);
+
+  @override
+  String toString() => msg ?? 'FooException';
+}
+
+void exception_test(bool t) {
+  print('\n');
+  print('#' * 40);
+  print('异常类测试');
+  print('#' * 40);
+  if (!t) {
+    throw FooException('This is an exception msg');
+  }
+}
+
+// 找到一个执行入口，此处等待1秒后直接返回print
+Future<Function> findEntryPoint() async {
+  await Future.delayed(Duration(seconds:1));
+  return print;
+}
+
+// 以args为参数执行exec函数
+Future<int> runExecutable(exec, args) async {
+  exec(args);
+  return 0;
+}
+
+// 分析exit code，此处直接输出一下
+Future<void> flushThenExit(code) async {
+  print('exit with code $code');
+}
+
+// 使用then链式回调按顺序执行异步函数
+void runUsingFuture() {
+  findEntryPoint().then((entryPoint) {
+    return runExecutable(entryPoint, "using then to callback.");
+  }).then(flushThenExit);
+}
+
+// 使用await可以写出类似于同步的异步代码
+Future<void> runUsingAsyncAwait() async {
+  var entryPoint = await findEntryPoint();
+  try {
+    var exitCode = await runExecutable(entryPoint, 'using await to callback.');
+    await flushThenExit(exitCode);
+  } catch (e) {
+  }
+}
+
+Future<void> throw_error_future(bool flag) async {
+  if (!flag) {
+    throw FooException('Exception in async function.');
+  } else {
+    print('No throwing Exception in async function.');
+  }
+}
+
+// catch异步函数中抛出的异常
+void catch_error(bool flag) {
+  throw_error_future(flag).then((_){}).catchError((e) {
+    print(e);
+  });
+}
+
+// 测试各种异步操作
+void async_test() {
+  print('\n');
+  print('#' * 40);
+  print('异步Future测试');
+  print('#' * 40);
+  runUsingFuture();
+  runUsingAsyncAwait();
+  catch_error(false);
+}
+
 int main() {
   dartcore_numbers_collection_string();
   collections();
   uri_test();
   dates_and_times();
   utility_test();
+  exception_test(true);
+  async_test();
   return 0;
 }

@@ -531,13 +531,30 @@ void encodeJson() {
 }
 
 // 测试json解析的功能
-void testJson() {
+void jsonTest() {
   print('\n');
   print('#' * 40);
   print('Json编码与解码');
   print('#' * 40);
   decodeJson();
   encodeJson();
+}
+
+// utf8解析测试
+void uft8Test(){
+  print('\n');
+  print('#' * 40);
+  print('uft8解析');
+  print('#' * 40);
+  List<int> utf8Bytes = [
+    0xc3, 0x8e, 0xc3, 0xb1, 0xc5, 0xa3, 0xc3, 0xa9,
+    0x72, 0xc3, 0xb1, 0xc3, 0xa5, 0xc5, 0xa3, 0xc3,
+    0xae, 0xc3, 0xb6, 0xc3, 0xb1, 0xc3, 0xa5, 0xc4,
+    0xbc, 0xc3, 0xae, 0xc5, 0xbe, 0xc3, 0xa5, 0xc5,
+    0xa3, 0xc3, 0xae, 0xe1, 0xbb, 0x9d, 0xc3, 0xb1
+  ];
+  var funnyWord = utf8.decode(utf8Bytes);
+  print(funnyWord);
 }
 
 
@@ -549,7 +566,8 @@ int main() {
   utility_test();
   exception_test(true);
   math_and_random();
-  testJson();
+  jsonTest();
+  uft8Test();
   async_test();
   return 0;
 }

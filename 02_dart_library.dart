@@ -546,6 +546,7 @@ void uft8Test(){
   print('#' * 40);
   print('uft8解析');
   print('#' * 40);
+  // 将utf8编码转换为字符串
   List<int> utf8Bytes = [
     0xc3, 0x8e, 0xc3, 0xb1, 0xc5, 0xa3, 0xc3, 0xa9,
     0x72, 0xc3, 0xb1, 0xc3, 0xa5, 0xc5, 0xa3, 0xc3,
@@ -555,6 +556,15 @@ void uft8Test(){
   ];
   var funnyWord = utf8.decode(utf8Bytes);
   print(funnyWord);
+  assert(funnyWord == 'Îñţérñåţîöñåļîžåţîờñ');
+
+  // 将字符串转换为utf8编码
+  List<int> encoded = utf8.encode('Îñţérñåţîöñåļîžåţîờñ');
+
+  assert(encoded.length == utf8Bytes.length);
+  for (int i = 0; i < encoded.length; i++) {
+    assert(encoded[i] == utf8Bytes[i]);
+  }
 }
 
 

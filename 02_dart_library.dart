@@ -1,5 +1,6 @@
 // dart:core test
 import 'dart:collection';
+import 'dart:math';
 
 void dartcore_numbers_collection_string() {
   // 测试dart核心库中数字、集合、字符串的功能
@@ -329,7 +330,9 @@ class Person {
 
 class Process {
   int _uid;
+
   Process(this._uid);
+
   int get uid => _uid;
 }
 
@@ -404,7 +407,7 @@ void exception_test(bool t) {
 
 // 找到一个执行入口，此处等待1秒后直接返回print
 Future<Function> findEntryPoint() async {
-  await Future.delayed(Duration(seconds:1));
+  await Future.delayed(Duration(seconds: 1));
   return print;
 }
 
@@ -432,8 +435,7 @@ Future<void> runUsingAsyncAwait() async {
   try {
     var exitCode = await runExecutable(entryPoint, 'using await to callback.');
     await flushThenExit(exitCode);
-  } catch (e) {
-  }
+  } catch (e) {}
 }
 
 Future<void> throw_error_future(bool flag) async {
@@ -446,7 +448,7 @@ Future<void> throw_error_future(bool flag) async {
 
 // catch异步函数中抛出的异常
 void catch_error(bool flag) {
-  throw_error_future(flag).then((_){}).catchError((e) {
+  throw_error_future(flag).then((_) {}).catchError((e) {
     print(e);
   });
 }
@@ -462,6 +464,40 @@ void async_test() {
   catch_error(false);
 }
 
+// 数学和随机数
+void math_and_random() {
+  print('\n');
+  print('#' * 40);
+  print('数学和随机数');
+  print('#' * 40);
+
+  assert(cos(pi).round() == -1.0);
+
+  // 度数和弧度的转换
+  var degrees = 30;
+  var radians = degrees * (pi / 180);
+  var sinOf30degrees = sin(radians);
+
+  // 一些基本的数学计算操作
+  assert((sinOf30degrees - 0.5).abs() < 0.01);
+  assert(max(1, 1000) == 1000);
+  assert(min(1, -1000) == -1000);
+
+  // 一些数学常量，有些基本的根号的无理数值也有
+  print(e);
+  print(pi);
+  print(sqrt2);
+
+  // 各类随机数的生成
+  var random = Random();
+  var value1 = random.nextDouble();
+  print('nextDouble: $value1');
+  var value2 = random.nextInt(10);
+  print('nextInt: $value2');
+  var value3 = random.nextBool();
+  print('nextBool: $value3');
+}
+
 int main() {
   dartcore_numbers_collection_string();
   collections();
@@ -469,6 +505,7 @@ int main() {
   dates_and_times();
   utility_test();
   exception_test(true);
+  math_and_random();
   async_test();
   return 0;
 }

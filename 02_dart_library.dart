@@ -1,6 +1,7 @@
 // dart:core test
 import 'dart:collection';
 import 'dart:math';
+import 'dart:convert';
 
 void dartcore_numbers_collection_string() {
   // 测试dart核心库中数字、集合、字符串的功能
@@ -498,6 +499,48 @@ void math_and_random() {
   print('nextBool: $value3');
 }
 
+void decodeJson() {
+  // 用以测试解析的json
+  var jsonString = '''
+  [
+    {"score": 40},
+    {"score": 80}
+  ]
+  ''';
+  var scores = jsonDecode(jsonString);
+  // 会按照json的具体内容自动选择格式进行解析
+  assert(scores is List);
+
+  var firstScore = scores[0];
+  assert(firstScore is Map);
+  assert(firstScore['score'] == 40);
+}
+
+void encodeJson() {
+  var scores = [
+    {'score': 40},
+    {'score': 80},
+    {'score': 100, 'overtime': true, 'special_guest': null}
+  ];
+
+  // 自动解析成string
+  var jsonText = jsonEncode(scores);
+  assert(jsonText == '[{"score":40},{"score":80},'
+      '{"score":100,"overtime":true,"special_guest":null}]');
+  print(jsonText);
+}
+
+// 测试json解析的功能
+void testJson() {
+  print('\n');
+  print('#' * 40);
+  print('Json编码与解码');
+  print('#' * 40);
+  decodeJson();
+  encodeJson();
+}
+
+
 int main() {
   dartcore_numbers_collection_string();
   collections();
@@ -506,6 +549,7 @@ int main() {
   utility_test();
   exception_test(true);
   math_and_random();
+  testJson();
   async_test();
   return 0;
 }
